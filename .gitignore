@@ -80,3 +80,7 @@ Testing/
 **/.idea/
 cmake-build-*/
 **/cmake-build-*/
+
+# Archivos temporales del montaje remoto
+.fuse_hidden*
+**/.fuse_hidden*
