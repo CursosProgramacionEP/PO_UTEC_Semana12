@@ -47,8 +47,8 @@ classDiagram
         +CAnimal()
         +CAnimal(TipoString pNombre, TipoReal pPeso, TipoReal pGananciaPorKilo)
         +~CAnimal()
-        +ProduceSonido(ostream os) void
-        +Alimentar(ostream os, CAlimento* pAlimento) void
+        +ProduceSonido(ostream os) void*
+        +Alimentar(ostream os, CAlimento* pAlimento) void*
         +getNombre() TipoString
         +getPeso() TipoReal
         +imprimir(ostream os) void

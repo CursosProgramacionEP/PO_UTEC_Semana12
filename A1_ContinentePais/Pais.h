@@ -5,7 +5,7 @@
 
 class Pais {
 private:
-    std::string nombre;      // la PPT dice "int nombre": es un error de la diapositiva
+    std::string nombre;
     long long poblacion;
 
 public:

@@ -8,7 +8,7 @@
 class Continente {
 private:
     std::string nombre;
-    std::vector<Pais> paises;   // los paises se guardan POR VALOR, como en el diagrama
+    std::vector<Pais> paises;
 
 public:
     Continente();

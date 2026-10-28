@@ -21,7 +21,7 @@ void Continente::agregar_pais(const Pais& pais) {
 // Al salir del vector la copia se destruye: no hay nada que liberar.
 bool Continente::remover_pais(const string& nombre) {
     for (int i = 0; i < (int) paises.size(); i++) {
-        if (paises[i].get_nombre() == nombre) {   // objeto por valor: se accede con .
+        if (paises[i].get_nombre() == nombre) {
             paises.erase(paises.begin() + i);
             return true;
         }

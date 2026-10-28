@@ -3,14 +3,12 @@
 
 class Alimento {
 protected:
-    int cantidad;        // protected para que Verdura pueda usarlo
+    int cantidad;
 
 public:
     Alimento();
     Alimento(int cantidad);
 
-    // Sin "virtual", tal como lo dibuja el diagrama.
-    // El ejercicio pide observar que pasa al agregarle virtual (ver tarea 7 del README).
     void mostrar();
 };
 
