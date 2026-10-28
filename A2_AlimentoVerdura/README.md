@@ -6,8 +6,6 @@ Primer ejercicio de **herencia** del laboratorio: *una verdura **es un** aliment
 
 ## Diagrama de clase
 
-Es el diagrama de la diapositiva, tal cual:
-
 ```mermaid
 classDiagram
     class Alimento {
@@ -23,10 +21,10 @@ classDiagram
     Alimento <|-- Verdura : Herencia
 ```
 
-Dos precisiones sobre la diapositiva:
+Dos precisiones:
 
-- El diagrama no muestra constructores con parámetros. Aquí ambas clases tienen uno además del vacío, porque sin eso no hay forma de cargar los datos.
-- `cantidad` va como `protected` para que `Verdura::mostrar()` pueda usarlo. El diagrama no indica visibilidad.
+- Ambas clases tienen un constructor con parámetros además del vacío, porque sin eso no hay forma de cargar los datos.
+- `cantidad` va como `protected` para que `Verdura::mostrar()` pueda usarlo.
 
 ## El punto del ejercicio
 

@@ -2,13 +2,13 @@
 
 > Ejercicio 3 de la sesión 11A: *tomando como base el código y el diagrama de clase, aplique los conceptos de herencia para modelar los escenarios descritos.* **OJO: USE FUNCIONES VIRTUALES PURAS.**
 
-> El código base de la PPT está en un enlace externo que no tenemos; aquí el proyecto se arma desde cero con las firmas que aparecen en la teoría de la sesión 11:
+> El proyecto se arma desde cero con las firmas que aparecen en la teoría de la sesión:
 > ```cpp
 > virtual void ProduceSonido(ostream &os) = 0;
 > virtual void Alimentar(ostream &os, CAlimento* pAlimento) = 0;
 > ```
 
-## Requerimientos de la PPT
+## Requerimientos
 
 **Sonido de cada animal**
 

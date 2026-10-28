@@ -221,7 +221,7 @@ Se ve en la teoría de la sesión y se practica en los [ejercicios propuestos](E
 
 ## 9. Miscelánea: preguntas que pueden caer en clase
 
-Cosas que no están en las diapositivas de esta sesión, pero que un alumno despierto puede preguntar.
+Cosas que no entran en el temario de la sesión, pero que pueden salir en clase.
 
 | Pregunta | Respuesta corta |
 |---|---|
@@ -250,7 +250,7 @@ El constructor invoca a los dos en la lista de inicializadores, en el orden en q
 
 Si además ambas heredan de una misma clase, el objeto termina con **dos copias** de esa base — el "problema del diamante" — y se evita con `class CAnimalTerrestre : virtual public CAnimal`.
 
-Está en el índice de la teoría de la sesión, pero las diapositivas no lo desarrollan.
+Está en el índice de la teoría de la sesión, pero no se desarrolla.
 
 ### Cerrar la herencia con `final`
 

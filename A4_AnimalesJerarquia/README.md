@@ -1,6 +1,6 @@
 # A4 – Animales por niveles (la jerarquía completa del diagrama)
 
-> Es el **mismo ejercicio 3** de la sesión 11A, pero armado con la jerarquía que dibuja el diagrama de la diapositiva, en vez de la versión plana de [A3](../A3_Animales/README.md).
+> Es el **mismo ejercicio 3**, armado con la jerarquía completa del diagrama de clases, en vez de la versión plana de [A3](../A3_Animales/README.md).
 
 > A3 cuelga los cinco animales directamente de `CAnimal`. Acá aparecen las clases intermedias —`CAve`, `CMamifero`, `CFelino`, `CDomestico`, `CSalvaje`— y la cadena llega a cinco niveles.
 
@@ -22,7 +22,7 @@ CAnimal              abstracta   <- aqui se declaran las virtuales puras
             └── CLeon    concreta
 ```
 
-Sale de la teoría de la sesión, slide 11: *"Un búho y una gallina son aves. Un ratón y un perro son mamíferos. Un gato es un felino doméstico y a su vez es un mamífero. Un tigre y un león son felinos salvajes y a su vez son mamíferos. Todos a su vez son animales."*
+Sale de la teoría de la sesión: *"Un búho y una gallina son aves. Un ratón y un perro son mamíferos. Un gato es un felino doméstico y a su vez es un mamífero. Un tigre y un león son felinos salvajes y a su vez son mamíferos. Todos a su vez son animales."*
 
 ## Diagrama de clase
 

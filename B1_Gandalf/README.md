@@ -2,7 +2,7 @@
 
 > Ejercicio 1 de la sesión 11B: *Gandalf el Gris pierde su capacidad de luchar cuando tiene hambre. Modele una aplicación que calcule los puntos de felicidad que Gandalf tiene después de comer toda la comida que se pasa en la entrada. Imprima en la primera línea los puntos totales y en la segunda el nombre del estado de ánimo.*
 
-## Requerimientos de la PPT
+## Requerimientos
 
 **Puntos de felicidad por alimento**
 
@@ -157,7 +157,7 @@ Lembas HoneyCake Manzana Hongos Abarrote Piedra Melon
 Feliz
 ```
 
-Las dos últimas líneas son la salida que pide la PPT: puntos totales y estado de ánimo.
+Las dos últimas líneas son la salida que pide el enunciado: puntos totales y estado de ánimo.
 
 ## Casos de prueba
 

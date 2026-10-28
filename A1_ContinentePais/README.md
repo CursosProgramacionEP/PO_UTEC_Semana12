@@ -6,8 +6,6 @@
 
 ## Diagrama de clase
 
-Es el diagrama de la diapositiva, tal cual:
-
 ```mermaid
 classDiagram
     class Continente {
@@ -28,16 +26,16 @@ classDiagram
     Continente o-- Pais : Agregación
 ```
 
-Dos precisiones sobre la diapositiva:
+Dos precisiones:
 
-- El diagrama dice `int nombre` en `Pais`: es un error de la PPT, el nombre es `string`.
-- El diagrama no muestra tipos de retorno ni un constructor con parámetros. Aquí `remover_pais()` devuelve `bool` (si lo encontró o no) y `Pais` tiene además un constructor con nombre y población, porque sin él no hay forma de cargar los datos.
+- El nombre del país es un `string`.
+- `remover_pais()` devuelve `bool`: indica si lo encontró o no. Y `Pais` tiene un constructor con nombre y población además del vacío, porque sin él no hay forma de cargar los datos.
 
 ## La relación
 
 El atributo es `vector<Pais>`: **objetos por valor**, no punteros.
 
-| | `vector<Pais>` (lo que pide la PPT) |
+| | `vector<Pais>` |
 |---|---|
 | Qué guarda el vector | Copias de los países |
 | Cómo se accede a un elemento | Con `.` (`paises[i].get_nombre()`), no con `->` |
@@ -47,11 +45,11 @@ El atributo es `vector<Pais>`: **objetos por valor**, no punteros.
 | Remover un país | `erase` sobre el vector; la copia se destruye ahí mismo |
 | ¿Hay `new` o `delete`? | **No** |
 
-### Una advertencia para la clase
+### Para pensar
 
-La diapositiva etiqueta la relación como **agregación** y dibuja el rombo vacío ◇, pero implementa `vector<Pais>` por valor. Según el cuadro de la semana 11, por valor es **composición** (rombo relleno ◆): la parte nace y muere con el todo y no se puede compartir.
+El diagrama etiqueta la relación como **agregación** y dibuja el rombo vacío ◇, pero el atributo es `vector<Pais>` por valor. Según el cuadro de la semana 11, por valor es **composición** (rombo relleno ◆): la parte nace y muere con el todo y no se puede compartir.
 
-Es una buena pregunta para lanzarles en clase: *¿el diagrama de la diapositiva es coherente?* Para que fuera agregación de verdad el atributo tendría que ser `vector<Pais*>`, con los países creados y liberados por el `main`.
+¿Es coherente, entonces? Para que fuera agregación de verdad el atributo tendría que ser `vector<Pais*>`, con los países creados y liberados por el `main`.
 
 | | Agregación | Composición |
 |---|---|---|
