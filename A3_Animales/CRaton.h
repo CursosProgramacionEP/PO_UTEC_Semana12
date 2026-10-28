@@ -6,7 +6,7 @@
 class CRaton : public CAnimal {   // "Raton ES UN animal"
 public:
     CRaton();
-    CRaton(TipoReal pPeso);
+    CRaton(TipoDecimal pPeso);
     virtual ~CRaton();
 
     void ProduceSonido(std::ostream &os) override;

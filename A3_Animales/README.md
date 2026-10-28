@@ -40,27 +40,33 @@ classDiagram
     class CAnimal {
         <<abstract>>
         #TipoString m_Nombre
-        #TipoReal m_Peso
-        #TipoReal m_GananciaPorKilo
+        #TipoDecimal m_Peso
+        #TipoDecimal m_GananciaPorKilo
         #Comer(ostream os, CAlimento* pAlimento) void
         #Rechazar(ostream os, CAlimento* pAlimento) void
         +CAnimal()
-        +CAnimal(TipoString pNombre, TipoReal pPeso, TipoReal pGananciaPorKilo)
+        +CAnimal(TipoString pNombre, TipoDecimal pPeso, TipoDecimal pGananciaPorKilo)
         +~CAnimal()
         +ProduceSonido(ostream os) void*
         +Alimentar(ostream os, CAlimento* pAlimento) void*
         +getNombre() TipoString
-        +getPeso() TipoReal
+        +getPeso() TipoDecimal
         +imprimir(ostream os) void
+    }
+    class TipoAlimento {
+        <<enumeration>>
+        VERDURA
+        FRUTA
+        CARNE
     }
     class CAlimento {
         -TipoString m_Nombre
         -TipoAlimento m_Tipo
-        -TipoReal m_Cantidad
-        +CAlimento(TipoString pNombre, TipoAlimento pTipo, TipoReal pCantidad)
+        -TipoDecimal m_Cantidad
+        +CAlimento(TipoString pNombre, TipoAlimento pTipo, TipoDecimal pCantidad)
         +getNombre() TipoString
         +getTipo() TipoAlimento
-        +getCantidad() TipoReal
+        +getCantidad() TipoDecimal
         +getTipoTexto() TipoString
     }
     class CGallina {
@@ -89,6 +95,7 @@ classDiagram
     CAnimal <|-- CPerro : Herencia
     CAnimal <|-- CTigre : Herencia
     CAnimal ..> CAlimento : usa
+    CAlimento ..> TipoAlimento : usa
 ```
 
 ## Función virtual pura y clase abstracta
@@ -125,6 +132,48 @@ El `main` **no pregunta de qué animal se trata**: no hay `if` por tipo. Esa dec
 
 `Comer()` y `Rechazar()` están en `CAnimal` como `protected`: son el comportamiento común, y cada subclase solo decide **cuándo** llamar a cada uno.
 
+## Por qué los métodos reciben `ostream &os`
+
+Las dos funciones virtuales puras no escriben en la consola: reciben **dónde** escribir.
+
+```cpp
+virtual void ProduceSonido(std::ostream &os) = 0;
+virtual void Alimentar(std::ostream &os, CAlimento* pAlimento) = 0;
+```
+
+`std::ostream` es el tipo de los flujos de salida. `std::cout` es uno, pero también lo son un archivo y un string en memoria. Al recibir el flujo como parámetro, la clase deja de estar amarrada a la pantalla:
+
+```cpp
+CGallina gallina(2.0);
+
+gallina.ProduceSonido(cout);           // a la consola
+
+ofstream archivo("salida.txt");
+gallina.ProduceSonido(archivo);        // al archivo salida.txt
+
+ostringstream s;
+gallina.ProduceSonido(s);              // a un string en memoria
+cout << "lo que escribio: " << s.str() << endl;
+```
+
+Los tres usan **la misma función**, sin cambiar una línea de `CGallina`.
+
+| Destino | Tipo | Para qué sirve |
+|---|---|---|
+| `cout` | `ostream` | lo normal, ver la salida en pantalla |
+| `ofstream` | archivo | dejar un registro de la simulación |
+| `ostringstream` | string en memoria | capturar la salida y **comprobar** que dice lo correcto |
+
+El tercero es el más útil para corregir: permite verificar en código que la gallina realmente escribió `"Cluck"`, sin que nadie tenga que leer la consola.
+
+Dos detalles de sintaxis:
+
+- **El `&` es obligatorio.** Los flujos no se pueden copiar: `std::ostream os` sin el `&` no compila.
+- **No puede ser `const`**, porque escribir en un flujo lo modifica.
+- Para usar los otros dos destinos hay que incluir `<fstream>` (archivos) y `<sstream>` (strings).
+
+Si en vez de esto cada método usara `cout` directamente, la clase funcionaría igual, pero solo podría imprimir en pantalla para siempre.
+
 ## Preguntas de la sesión
 
 | Pregunta | Respuesta |
@@ -150,7 +199,7 @@ flowchart TD
 
 ## Tareas
 
-- [ ] **1. `Tipos.h`.** Alias `TipoEntero`, `TipoReal`, `TipoString` y el `enum TipoAlimento { VERDURA, FRUTA, CARNE }`.
+- [ ] **1. `Tipos.h`.** Alias `TipoEntero`, `TipoDecimal`, `TipoString` y el `enum TipoAlimento { VERDURA, FRUTA, CARNE }`.
 - [ ] **2. Clase `CAlimento`.** Nombre, tipo y cantidad en kilos, con sus getters y `getTipoTexto()`.
 - [ ] **3. Clase abstracta `CAnimal`.** Atributos `protected` `m_Nombre`, `m_Peso`, `m_GananciaPorKilo`.
 - [ ] **4. Funciones virtuales puras.** Declara `ProduceSonido` y `Alimentar` con `= 0`. *Pista: incluye `<ostream>`.*

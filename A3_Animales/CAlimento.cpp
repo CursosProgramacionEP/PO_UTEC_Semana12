@@ -8,7 +8,7 @@ CAlimento::CAlimento() {
     m_Cantidad = 0.0;
 }
 
-CAlimento::CAlimento(const TipoString& pNombre, TipoAlimento pTipo, TipoReal pCantidad) {
+CAlimento::CAlimento(const TipoString& pNombre, TipoAlimento pTipo, TipoDecimal pCantidad) {
     m_Nombre   = pNombre;
     m_Tipo     = pTipo;
     m_Cantidad = pCantidad;
@@ -18,7 +18,7 @@ CAlimento::~CAlimento() {}
 
 TipoString   CAlimento::getNombre() const   { return m_Nombre; }
 TipoAlimento CAlimento::getTipo() const     { return m_Tipo; }
-TipoReal     CAlimento::getCantidad() const { return m_Cantidad; }
+TipoDecimal     CAlimento::getCantidad() const { return m_Cantidad; }
 
 TipoString CAlimento::getTipoTexto() const {
     switch (m_Tipo) {

@@ -6,7 +6,7 @@
 class CPerro : public CAnimal {   // "Perro ES UN animal"
 public:
     CPerro();
-    CPerro(TipoReal pPeso);
+    CPerro(TipoDecimal pPeso);
     virtual ~CPerro();
 
     void ProduceSonido(std::ostream &os) override;

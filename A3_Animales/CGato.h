@@ -6,7 +6,7 @@
 class CGato : public CAnimal {   // "Gato ES UN animal"
 public:
     CGato();
-    CGato(TipoReal pPeso);
+    CGato(TipoDecimal pPeso);
     virtual ~CGato();
 
     void ProduceSonido(std::ostream &os) override;

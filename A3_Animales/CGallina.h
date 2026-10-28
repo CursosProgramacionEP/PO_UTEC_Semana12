@@ -6,7 +6,7 @@
 class CGallina : public CAnimal {   // "Gallina ES UN animal"
 public:
     CGallina();
-    CGallina(TipoReal pPeso);
+    CGallina(TipoDecimal pPeso);
     virtual ~CGallina();
 
     void ProduceSonido(std::ostream &os) override;

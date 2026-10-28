@@ -6,7 +6,7 @@
 class CTigre : public CAnimal {   // "Tigre ES UN animal"
 public:
     CTigre();
-    CTigre(TipoReal pPeso);
+    CTigre(TipoDecimal pPeso);
     virtual ~CTigre();
 
     void ProduceSonido(std::ostream &os) override;

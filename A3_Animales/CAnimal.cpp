@@ -8,7 +8,7 @@ CAnimal::CAnimal() {
     m_GananciaPorKilo = 0.0;
 }
 
-CAnimal::CAnimal(const TipoString& pNombre, TipoReal pPeso, TipoReal pGananciaPorKilo) {
+CAnimal::CAnimal(const TipoString& pNombre, TipoDecimal pPeso, TipoDecimal pGananciaPorKilo) {
     m_Nombre          = pNombre;
     m_Peso            = pPeso;
     m_GananciaPorKilo = pGananciaPorKilo;
@@ -32,7 +32,7 @@ void CAnimal::Rechazar(ostream &os, CAlimento* pAlimento) const {
 }
 
 TipoString CAnimal::getNombre() const { return m_Nombre; }
-TipoReal   CAnimal::getPeso() const   { return m_Peso; }
+TipoDecimal   CAnimal::getPeso() const   { return m_Peso; }
 
 void CAnimal::imprimir(ostream &os) const {
     os << m_Nombre << " | peso: " << m_Peso << " kg" << endl;

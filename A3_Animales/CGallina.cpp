@@ -5,7 +5,7 @@ using namespace std;
 CGallina::CGallina() : CAnimal("Gallina", 0.0, 0.35) {}
 
 // La lista de inicializadores invoca al constructor de la superclase.
-CGallina::CGallina(TipoReal pPeso) : CAnimal("Gallina", pPeso, 0.35) {}
+CGallina::CGallina(TipoDecimal pPeso) : CAnimal("Gallina", pPeso, 0.35) {}
 
 CGallina::~CGallina() {}
 

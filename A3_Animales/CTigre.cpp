@@ -5,7 +5,7 @@ using namespace std;
 CTigre::CTigre() : CAnimal("Tigre", 0.0, 1.00) {}
 
 // La lista de inicializadores invoca al constructor de la superclase.
-CTigre::CTigre(TipoReal pPeso) : CAnimal("Tigre", pPeso, 1.00) {}
+CTigre::CTigre(TipoDecimal pPeso) : CAnimal("Tigre", pPeso, 1.00) {}
 
 CTigre::~CTigre() {}
 

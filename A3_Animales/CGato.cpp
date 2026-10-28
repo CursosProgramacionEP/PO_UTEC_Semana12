@@ -5,7 +5,7 @@ using namespace std;
 CGato::CGato() : CAnimal("Gato", 0.0, 0.30) {}
 
 // La lista de inicializadores invoca al constructor de la superclase.
-CGato::CGato(TipoReal pPeso) : CAnimal("Gato", pPeso, 0.30) {}
+CGato::CGato(TipoDecimal pPeso) : CAnimal("Gato", pPeso, 0.30) {}
 
 CGato::~CGato() {}
 

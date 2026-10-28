@@ -9,8 +9,8 @@
 class CAnimal {
 protected:
     TipoString m_Nombre;
-    TipoReal   m_Peso;
-    TipoReal   m_GananciaPorKilo;   // cuanto sube de peso por cada kilo que come
+    TipoDecimal   m_Peso;
+    TipoDecimal   m_GananciaPorKilo;   // cuanto sube de peso por cada kilo que come
 
     // Ayudas que las subclases reutilizan al implementar Alimentar().
     void Comer(std::ostream &os, CAlimento* pAlimento);
@@ -18,7 +18,7 @@ protected:
 
 public:
     CAnimal();
-    CAnimal(const TipoString& pNombre, TipoReal pPeso, TipoReal pGananciaPorKilo);
+    CAnimal(const TipoString& pNombre, TipoDecimal pPeso, TipoDecimal pGananciaPorKilo);
     virtual ~CAnimal();
 
     // Funciones virtuales puras: cada animal las implementa a su manera.
@@ -26,7 +26,7 @@ public:
     virtual void Alimentar(std::ostream &os, CAlimento* pAlimento) = 0;
 
     TipoString getNombre() const;
-    TipoReal   getPeso() const;
+    TipoDecimal   getPeso() const;
     void       imprimir(std::ostream &os) const;
 };
 

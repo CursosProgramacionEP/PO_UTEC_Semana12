@@ -5,7 +5,7 @@ using namespace std;
 CRaton::CRaton() : CAnimal("Raton", 0.0, 0.10) {}
 
 // La lista de inicializadores invoca al constructor de la superclase.
-CRaton::CRaton(TipoReal pPeso) : CAnimal("Raton", pPeso, 0.10) {}
+CRaton::CRaton(TipoDecimal pPeso) : CAnimal("Raton", pPeso, 0.10) {}
 
 CRaton::~CRaton() {}
 
