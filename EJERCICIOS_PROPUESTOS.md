@@ -270,7 +270,7 @@ classDiagram
         +descripcion() string
     }
     class FabricaAlimentos {
-        +crear(string nombre) Alimento*
+        +crear(string nombre) Alimento#42;
     }
     Alimento <|-- Vino : Herencia
     Alimento <|-- Pipa : Herencia

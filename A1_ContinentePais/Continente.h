@@ -8,24 +8,15 @@
 class Continente {
 private:
     std::string nombre;
-    std::vector<Pais*> paises;   // agregacion: los paises existen fuera del continente
+    std::vector<Pais> paises;   // los paises se guardan POR VALOR, como en el diagrama
 
 public:
     Continente();
     Continente(const std::string& nombre);
-    ~Continente();
 
-    void set_nombre(const std::string& nombre);
-    std::string get_nombre() const;
-
-    void agregar_pais(Pais* pais);
-    Pais* remover_pais(const std::string& nombre);
-    Pais* buscar_pais(const std::string& nombre) const;
-
-    int cantidad_paises() const;
-    long long poblacion_total() const;
-
-    void imprimir_poblaciones() const;
+    void agregar_pais(const Pais& pais);
+    bool remover_pais(const std::string& nombre);
+    void imprimir_paises() const;
 };
 
 #endif

@@ -6,29 +6,26 @@ using namespace std;
 
 int main() {
     cout << "--- 1. Un objeto Alimento y un objeto Verdura ---" << endl;
-    Alimento arroz("Arroz", 4.50);
-    Verdura brocoli("Brocoli", 6.90, "invierno");
+    Alimento alimento(10);
+    Verdura verdura("Brocoli", 5);
 
-    arroz.imprimir();
-    brocoli.imprimir();
-    cout << "Verduras compradas: " << Verdura::get_cantidad() << endl;
+    alimento.mostrar();
+    verdura.mostrar();
 
     cout << "\n--- 2. Copia de Verdura a Alimento (por valor) ---" << endl;
-    Alimento copia = brocoli;   // solo se copia la parte Alimento
-    copia.imprimir();           // imprime [Alimento]: se perdio la parte Verdura
-    cout << "Verduras compradas: " << Verdura::get_cantidad()
-         << "  (la copia NO es una Verdura)" << endl;
+    Alimento copia = verdura;   // solo se copia la parte Alimento
+    copia.mostrar();            // se perdio el nombre: ya no es una Verdura
 
     cout << "\n--- 3. El mismo caso con punteros ---" << endl;
-    Alimento* pAlimento = new Verdura("Zanahoria", 3.20, "todo el anio");
-    pAlimento->imprimir();      // imprime [Verdura]: el metodo virtual resuelve en tiempo de ejecucion
-    cout << "tipo() a traves del puntero: " << pAlimento->tipo() << endl;
-    cout << "Verduras compradas: " << Verdura::get_cantidad() << endl;
+    Alimento* pAlimento = new Verdura("Zanahoria", 3);
+    pAlimento->mostrar();       // SIN virtual: llama a Alimento::mostrar()
 
-    cout << "\n--- 4. Liberando el puntero (destructor virtual) ---" << endl;
-    delete pAlimento;           // ~Verdura y luego ~Alimento
-    pAlimento = nullptr;
-    cout << "Verduras compradas: " << Verdura::get_cantidad() << endl;
+    cout << "\n--- 4. Llamando al metodo de la subclase ---" << endl;
+    Verdura* pVerdura = new Verdura("Espinaca", 7);
+    pVerdura->mostrar();        // aqui si entra Verdura::mostrar()
+
+    delete pAlimento;
+    delete pVerdura;
 
     cout << "\n--- Fin del programa ---" << endl;
     return 0;

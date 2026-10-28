@@ -2,83 +2,100 @@
 
 > Ejercicio 1 de la sesión 11A: *definir una clase `Continente` y una clase `Pais` que permita crear un objeto `Continente` que contenga un conjunto de países. Implementar métodos para remover países del continente e imprimir sus poblaciones.*
 
-> **Ojo:** este ejercicio todavía **no usa herencia**. Es un repaso de la **agregación** de la semana 11 y sirve de punto de partida: la herencia entra desde A2.
+> **Ojo:** este ejercicio todavía **no usa herencia**. Es un repaso de la semana 11 y sirve de punto de partida: la herencia entra desde A2.
 
 ## Diagrama de clase
+
+Es el diagrama de la diapositiva, tal cual:
 
 ```mermaid
 classDiagram
     class Continente {
         -string nombre
-        -vector~Pais*~ paises
+        -vector~Pais~ paises
         +Continente()
-        +Continente(string nombre)
-        +~Continente()
-        +set_nombre(string nombre) void
-        +get_nombre() string
-        +agregar_pais(Pais* pais) void
-        +remover_pais(string nombre) Pais*
-        +buscar_pais(string nombre) Pais*
-        +cantidad_paises() int
-        +poblacion_total() long long
-        +imprimir_poblaciones() void
+        +agregar_pais(Pais pais) void
+        +remover_pais(string nombre) bool
+        +imprimir_paises() void
     }
     class Pais {
         -string nombre
         -long long poblacion
         +Pais()
-        +Pais(string nombre, long long poblacion)
-        +~Pais()
-        +set_nombre(string nombre) void
-        +set_poblacion(long long poblacion) void
         +get_nombre() string
         +get_poblacion() long long
-        +imprimir() void
     }
     Continente o-- Pais : Agregación
 ```
 
+Dos precisiones sobre la diapositiva:
+
+- El diagrama dice `int nombre` en `Pais`: es un error de la PPT, el nombre es `string`.
+- El diagrama no muestra tipos de retorno ni un constructor con parámetros. Aquí `remover_pais()` devuelve `bool` (si lo encontró o no) y `Pais` tiene además un constructor con nombre y población, porque sin él no hay forma de cargar los datos.
+
 ## La relación
 
-| | Agregación |
+El atributo es `vector<Pais>`: **objetos por valor**, no punteros.
+
+| | `vector<Pais>` (lo que pide la PPT) |
 |---|---|
-| Cómo se representa | Un `vector<Pais*>` dentro de `Continente` |
-| Quién crea los objetos | El `main`, con `new` |
-| Quién los destruye | El `main`, con `delete` |
-| Si desaparece el `Continente` | Los países siguen existiendo |
-| Remover un país | Sale del vector con `erase`; el objeto no se borra |
-| Símbolo UML | Rombo vacío ◇ del lado del continente |
+| Qué guarda el vector | Copias de los países |
+| Cómo se accede a un elemento | Con `.` (`paises[i].get_nombre()`), no con `->` |
+| Quién crea los objetos | El `main` los construye y `agregar_pais()` los **copia** |
+| Quién los destruye | Nadie: se destruyen solos al destruirse el continente |
+| Si desaparece el `Continente` | Los países desaparecen con él |
+| Remover un país | `erase` sobre el vector; la copia se destruye ahí mismo |
+| ¿Hay `new` o `delete`? | **No** |
+
+### Una advertencia para la clase
+
+La diapositiva etiqueta la relación como **agregación** y dibuja el rombo vacío ◇, pero implementa `vector<Pais>` por valor. Según el cuadro de la semana 11, por valor es **composición** (rombo relleno ◆): la parte nace y muere con el todo y no se puede compartir.
+
+Es una buena pregunta para lanzarles en clase: *¿el diagrama de la diapositiva es coherente?* Para que fuera agregación de verdad el atributo tendría que ser `vector<Pais*>`, con los países creados y liberados por el `main`.
+
+| | Agregación | Composición |
+|---|---|---|
+| Atributo | `vector<Pais*>` | `vector<Pais>` |
+| Acceso | `->` | `.` |
+| ¿Se comparte la parte? | Sí | No |
+| ¿Quién libera? | Quien hizo el `new` | Nadie: muere con el todo |
+| Símbolo UML | ◇ | ◆ |
 
 ## Preguntas de la sesión
 
 | Pregunta | Respuesta |
 |---|---|
-| ¿Por qué el vector guarda punteros y no objetos? | Porque los países existen por sí solos; el continente solo los agrupa |
-| ¿Qué devuelve `remover_pais()`? | El puntero al país que salió de la lista, para que el `main` siga teniéndolo |
-| ¿Qué pasa si el destructor del continente hace `delete` de cada país? | Deja de ser agregación y, si el `main` también los libera, se borran dos veces |
-| ¿Cómo se comprueba en la consola? | Por el orden de los mensajes de los destructores al terminar el programa |
+| ¿Por qué se accede con `.` y no con `->`? | Porque el vector guarda objetos, no punteros |
+| ¿Qué pasa con el país al hacer `erase`? | Se destruye su copia dentro del vector; no hay `delete` que hacer |
+| ¿Qué le pasa al objeto original que se pasó a `agregar_pais()`? | Nada: el continente se quedó con una **copia** |
+| ¿Cómo se avisa que un país no existe? | Con el `bool` que devuelve `remover_pais()` |
+| ¿Por qué no se compara con `pais != Pais()`? | Porque `Pais` no define `operator==`; la búsqueda se hace por nombre |
 
-## Diagrama de flujo – `poblacion_total()`
+## Diagrama de flujo – `remover_pais(nombre)`
 
 ```mermaid
 flowchart TD
-    A([Inicio]) --> B["total = 0<br/>i = 0"]
+    A([Inicio]) --> B["i = 0"]
     B --> C{"i < paises.size()?"}
-    C -- Sí --> D["total = total + paises[i]->get_poblacion()<br/>i = i + 1"]
-    D --> C
-    C -- No --> E[/"retornar total"/]
-    E --> F([Fin])
+    C -- Sí --> D{"paises[i].get_nombre() == nombre?"}
+    D -- Sí --> E["paises.erase(paises.begin() + i)"]
+    E --> F[/"retornar true"/]
+    D -- No --> G["i = i + 1"]
+    G --> C
+    C -- No --> H[/"retornar false"/]
+    F --> I([Fin])
+    H --> I
 ```
 
 ## Tareas
 
 - [ ] **1. Clase `Pais`.** Crea `Pais.h` y `Pais.cpp` con los atributos privados `nombre` y `poblacion`.
-- [ ] **2. Constructores y destructor de `Pais`.** Uno vacío y uno con parámetros. El destructor imprime un mensaje con el nombre. *Pista: usa `this->` dentro del constructor.*
-- [ ] **3. Setters, getters e `imprimir()`** de `Pais`.
-- [ ] **4. Clase `Continente`.** Atributos privados `nombre` y `vector<Pais*> paises`. *Pista: incluye `<vector>` en el `.h`.*
-- [ ] **5. `agregar_pais(Pais*)`.** Guarda el puntero con `push_back`. No crea nada con `new`.
-- [ ] **6. `remover_pais(string)`.** Busca por nombre, saca el elemento con `erase` y **devuelve el puntero**. *Pista: no uses `delete` aquí.*
-- [ ] **7. `imprimir_poblaciones()`.** Recorre el vector con `->` e imprime cada país; al final muestra la población total.
-- [ ] **8. `poblacion_total()`.** Acumula la población de todos los países del vector.
-- [ ] **9. `main`.** Crea cuatro países con `new`, agrégalos al continente, imprime, remueve uno, vuelve a imprimir y libera todos los países con `delete` al final.
-- [ ] **10. Comprobación.** Imprime el país removido después de sacarlo de la lista y responde: ¿sigue existiendo?
+- [ ] **2. Constructores de `Pais`.** Uno vacío y uno con parámetros. *Pista: usa `this->` dentro del constructor.*
+- [ ] **3. `get_nombre()` y `get_poblacion()`**, los dos `const`.
+- [ ] **4. Clase `Continente`.** Atributos privados `nombre` y `vector<Pais> paises`. *Pista: incluye `<vector>` en el `.h`.*
+- [ ] **5. `agregar_pais(const Pais&)`.** Copia el país al vector con `push_back`. *Pista: el parámetro va por referencia constante para no copiarlo dos veces.*
+- [ ] **6. `remover_pais(string)`.** Busca por nombre, saca el elemento con `erase` y devuelve `true`; si no lo encuentra, `false`.
+- [ ] **7. `imprimir_paises()`.** Recorre el vector con `.` e imprime cada país; al final muestra la población total.
+- [ ] **8. `main`.** Crea el continente, agrégale cuatro países, imprime, remueve uno y vuelve a imprimir.
+- [ ] **9. Comprobación.** Intenta remover un país que no está y muestra el mensaje correspondiente.
+- [ ] **10. Para pensar.** El diagrama dice agregación pero el atributo es por valor. ¿Qué habría que cambiar para que fuera agregación de verdad?

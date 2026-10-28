@@ -67,7 +67,7 @@ classDiagram
         +estado_animo() string
     }
     class FabricaAlimentos {
-        +crear(string nombre) Alimento*
+        +crear(string nombre) Alimento#42;
         -a_minusculas(string texto) string
     }
     Alimento <|-- Abarrote : Herencia

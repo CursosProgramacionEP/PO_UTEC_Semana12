@@ -5,38 +5,30 @@
 using namespace std;
 
 int main() {
-    // Los paises se crean aparte del continente: son objetos independientes.
-    Pais* peru      = new Pais("Peru", 34000000);
-    Pais* brasil    = new Pais("Brasil", 216000000);
-    Pais* chile     = new Pais("Chile", 19600000);
-    Pais* colombia  = new Pais("Colombia", 52000000);
-
     Continente sudamerica("Sudamerica");
-    sudamerica.agregar_pais(peru);
-    sudamerica.agregar_pais(brasil);
-    sudamerica.agregar_pais(chile);
-    sudamerica.agregar_pais(colombia);
+
+    // Cada pais se copia al agregarse: el continente guarda objetos, no punteros.
+    sudamerica.agregar_pais(Pais("Peru", 34000000));
+    sudamerica.agregar_pais(Pais("Brasil", 216000000));
+    sudamerica.agregar_pais(Pais("Chile", 19600000));
+    sudamerica.agregar_pais(Pais("Colombia", 52000000));
 
     cout << "--- Paises del continente ---" << endl;
-    sudamerica.imprimir_poblaciones();
+    sudamerica.imprimir_paises();
 
     cout << "\n--- Se remueve Chile del continente ---" << endl;
-    Pais* removido = sudamerica.remover_pais("Chile");
-    if (removido != nullptr) {
-        cout << "Removido de la lista: ";
-        removido->imprimir();
+    if (sudamerica.remover_pais("Chile")) {
+        cout << "Chile fue removido" << endl;
+    } else {
+        cout << "Chile no estaba en la lista" << endl;
     }
-    sudamerica.imprimir_poblaciones();
+    sudamerica.imprimir_paises();
 
-    // El pais removido sigue existiendo: el continente solo lo agregaba.
-    cout << "\nEl objeto Chile sigue existiendo fuera del continente:" << endl;
-    chile->imprimir();
+    cout << "\n--- Se intenta remover un pais que no esta ---" << endl;
+    if (!sudamerica.remover_pais("Bolivia")) {
+        cout << "Bolivia no estaba en la lista" << endl;
+    }
 
     cout << "\n--- Fin del programa ---" << endl;
-    delete peru;
-    delete brasil;
-    delete chile;
-    delete colombia;
-
-    return 0;
+    return 0;   // no hay delete: los paises mueren con el continente
 }

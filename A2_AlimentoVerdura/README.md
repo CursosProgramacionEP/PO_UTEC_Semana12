@@ -1,90 +1,70 @@
-# A2 – Alimento y Verdura (herencia, static y métodos virtuales)
+# A2 – Alimento y Verdura (herencia y métodos virtuales)
 
 > Ejercicio 2 de la sesión 11A: *definir una clase `Alimento` y una clase derivada `Verdura` que permita obtener la cantidad de objetos `Verdura` compradas. Crear un objeto `Alimento`, un objeto `Verdura` y una copia de `Verdura` a `Alimento`. Repetir el procedimiento usando punteros y observar el comportamiento. Observe el efecto de métodos virtuales con herencia.*
 
-Este es el primer ejercicio de **herencia** del laboratorio: *una verdura **es un** alimento*.
+Primer ejercicio de **herencia** del laboratorio: *una verdura **es un** alimento*.
 
 ## Diagrama de clase
+
+Es el diagrama de la diapositiva, tal cual:
 
 ```mermaid
 classDiagram
     class Alimento {
-        #string nombre
-        #double precio
+        #int cantidad
         +Alimento()
-        +Alimento(string nombre, double precio)
-        +~Alimento()
-        +set_nombre(string nombre) void
-        +set_precio(double precio) void
-        +get_nombre() string
-        +get_precio() double
-        +tipo() string
-        +imprimir() void
+        +mostrar() void
     }
     class Verdura {
-        -string temporada
-        -static int cantidad
+        -string nombre
         +Verdura()
-        +Verdura(string nombre, double precio, string temporada)
-        +Verdura(Verdura& otra)
-        +~Verdura()
-        +set_temporada(string temporada) void
-        +get_temporada() string
-        +tipo() string
-        +imprimir() void
-        +get_cantidad() int
+        +mostrar() void
     }
     Alimento <|-- Verdura : Herencia
 ```
 
-`tipo()` e `imprimir()` son **virtuales** en `Alimento` y están **sobrescritas** (`override`) en `Verdura`. El destructor de `Alimento` también es virtual.
+Dos precisiones sobre la diapositiva:
 
-## Lo que hay que observar
+- El diagrama no muestra constructores con parámetros. Aquí ambas clases tienen uno además del vacío, porque sin eso no hay forma de cargar los datos.
+- `cantidad` va como `protected` para que `Verdura::mostrar()` pueda usarlo. El diagrama no indica visibilidad.
 
-| Caso | Qué se escribe | Qué imprime | Por qué |
-|---|---|---|---|
-| Objeto de la subclase | `Verdura brocoli(...)` | `[Verdura]` | El objeto es una verdura completa |
-| **Copia a la superclase** | `Alimento copia = brocoli;` | `[Alimento]` | Solo se copia la parte `Alimento`; se pierde `temporada` y el `override` |
-| **Puntero a la superclase** | `Alimento* p = new Verdura(...)` | `[Verdura]` | El método es `virtual`: se resuelve en tiempo de ejecución |
-| `delete p` | — | `~Verdura` y luego `~Alimento` | Porque el destructor de `Alimento` es `virtual` |
+## El punto del ejercicio
 
-La conclusión del ejercicio: **el polimorfismo funciona con punteros (o referencias), no con copias por valor.**
+`mostrar()` **no es virtual**, igual que en el diagrama. Eso es justamente lo que hay que observar:
 
-## El atributo `static`
+| Caso | Qué se escribe | Qué imprime |
+|---|---|---|
+| Objeto de la subclase | `verdura.mostrar()` | `[Verdura] Brocoli \| cantidad: 5` |
+| **Copia a la superclase** | `Alimento copia = verdura;` | `[Alimento] cantidad: 5` |
+| **Puntero a la superclase** | `Alimento* p = new Verdura(...)` | `[Alimento] cantidad: 3` |
+| Puntero a la subclase | `Verdura* p = new Verdura(...)` | `[Verdura] Espinaca \| cantidad: 7` |
 
-```cpp
-class Verdura : public Alimento {
-    static int cantidad;        // declaracion dentro de la clase
-};
-```
-```cpp
-int Verdura::cantidad = 0;      // definicion en el .cpp, una sola vez
-```
+Los dos casos del medio pierden la parte `Verdura`, pero por motivos distintos:
 
-- Es **uno solo para toda la clase**, no uno por objeto.
-- Se incrementa en **cada** constructor (incluido el constructor copia) y se decrementa en el destructor.
-- Se consulta sin necesidad de un objeto: `Verdura::get_cantidad()`.
-- `Alimento copia = brocoli;` **no** cambia el contador: esa copia no es una `Verdura`.
+- **La copia** se queda sin el `nombre`: al copiar a un `Alimento` solo cabe la parte `Alimento`. El objeto dejó de ser una verdura.
+- **El puntero** sí apunta a una `Verdura` completa, pero como `mostrar()` no es virtual, el compilador decide a qué función llamar mirando el **tipo del puntero** (`Alimento*`), no el objeto real.
+
+Ahí entra la última línea del enunciado: al agregar `virtual` a `mostrar()` en `Alimento`, el tercer caso pasa a imprimir `[Verdura]`, porque la decisión se toma en tiempo de ejecución. La copia, en cambio, **sigue imprimiendo `[Alimento]`**: el `virtual` no la arregla, porque ahí el objeto ya no es una verdura.
+
+La conclusión: el polimorfismo necesita `virtual` **y** punteros (o referencias). Falta cualquiera de los dos y no funciona.
 
 ## Preguntas de la sesión
 
 | Pregunta | Respuesta |
 |---|---|
-| ¿Por qué `nombre` y `precio` son `protected` y no `private`? | Para que `Verdura` pueda usarlos directamente; con `private` solo se llegaría por los getters |
-| ¿Por qué `Verdura` tiene constructor copia? | Para que el contador no se descuadre al copiar una verdura |
-| ¿Qué pasa si el destructor de `Alimento` no es `virtual`? | Al hacer `delete` sobre un `Alimento*` nunca se ejecuta `~Verdura` |
-| ¿Se puede llamar a `get_temporada()` desde un `Alimento*`? | No: la superclase no conoce los miembros añadidos por la subclase |
+| ¿Por qué `cantidad` es `protected` y no `private`? | Para que `Verdura` pueda usarlo directamente; con `private` solo se llegaría por un getter |
+| ¿Por qué la copia pierde el nombre? | Porque un `Alimento` no tiene dónde guardarlo: solo se copia la parte heredada |
+| ¿Por qué el puntero `Alimento*` llama a `Alimento::mostrar()`? | Porque `mostrar()` no es virtual: se resuelve en tiempo de compilación |
+| Al agregar `virtual`, ¿se arreglan los dos casos? | No: solo el del puntero. La copia sigue siendo un `Alimento` |
+| ¿Qué pasa con `delete pAlimento` si `Alimento` no tiene destructor virtual? | No se ejecutaría el destructor de `Verdura`. Aquí no se nota porque ninguna clase reserva memoria, pero es el siguiente paso del tema |
 
 ## Tareas
 
-- [ ] **1. Clase `Alimento`.** Atributos `protected` `nombre` y `precio`; constructores, setters y getters.
-- [ ] **2. Destructor virtual** de `Alimento`, que imprima un mensaje.
-- [ ] **3. Métodos `virtual`** `tipo()` e `imprimir()` en `Alimento`.
-- [ ] **4. Clase `Verdura : public Alimento`.** Agrega `temporada`. *Pista: incluye `Alimento.h` en `Verdura.h`.*
-- [ ] **5. Constructor con lista de inicializadores.** `Verdura(...) : Alimento(nombre, precio) { ... }`.
-- [ ] **6. Atributo `static int cantidad`.** Decláralo en el `.h` y defínelo en el `.cpp`; incremento en los constructores, decremento en el destructor.
-- [ ] **7. `override` de `tipo()` e `imprimir()`** en `Verdura`.
-- [ ] **8. `static int get_cantidad()`.** Devuelve el contador.
-- [ ] **9. `main` – caso por valor.** Crea un `Alimento`, una `Verdura` y una copia `Alimento copia = verdura;`. Imprime las tres y el contador.
-- [ ] **10. `main` – caso con punteros.** Crea `Alimento* p = new Verdura(...)`, imprime, muestra el contador, haz `delete` y vuelve a mostrarlo.
-- [ ] **11. Comprobación.** Responde por escrito: ¿por qué la copia imprime `[Alimento]` y el puntero imprime `[Verdura]`?
+- [ ] **1. Clase `Alimento`.** Atributo `protected` `cantidad`, constructor vacío y constructor con parámetro.
+- [ ] **2. `mostrar()` de `Alimento`.** Imprime la cantidad. **Sin** `virtual` por ahora.
+- [ ] **3. Clase `Verdura : public Alimento`.** Agrega `nombre`. *Pista: incluye `Alimento.h` en `Verdura.h`.*
+- [ ] **4. Constructor con lista de inicializadores.** `Verdura(...) : Alimento(cantidad) { ... }`.
+- [ ] **5. `mostrar()` de `Verdura`.** Imprime nombre y cantidad.
+- [ ] **6. `main`.** Los cuatro casos: objeto `Alimento`, objeto `Verdura`, copia `Alimento copia = verdura;` y los dos punteros.
+- [ ] **7. El experimento.** Agrega `virtual` a `mostrar()` en `Alimento`, vuelve a ejecutar y anota qué línea cambió y cuál no.
+- [ ] **8. Comprobación.** Responde por escrito: ¿por qué el `virtual` arregla el caso del puntero pero no el de la copia?
